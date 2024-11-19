@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .signup-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .signup-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .signup-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <h1>Signup</h1>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="user_name">Username</label>
+                <input type="text" id="user_name" name="user_name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit" class="signup-btn">Signup</button>
+        </form>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signupForm');
+const messageDiv = document.getElementById('message');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent form from submitting traditionally
+
+    // Collect user input
+    const userData = {
+        user_name: form.user_name.value,
+        email: form.email.value,
+        password: form.password.value,
+        confirm_password: form.confirm_password.value,
+    };
+
+    try {
+        // Send data to the backend
+        const response = await fetch('http://localhost:3300/api/signup/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        });
+
+        // Parse and handle the response
+        const data = await response.json();
+        if (response.ok) {
+            messageDiv.style.color = 'green'
+            ;
+            messageDiv.textContent = data.message;
+        } else {
+            messageDiv.style.color = 'red';
+            messageDiv.textContent = data.message;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        messageDiv.style.color = 'red';
+        messageDiv.textContent = 'An error occurred while signing up.';
+    }
+});
+
+    </script>
+</body>
+
+</html>
